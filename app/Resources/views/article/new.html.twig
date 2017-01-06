@@ -3,14 +3,24 @@
 {% block body %}
     <h1>Article creation</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
+    <div class="row">
+        {{ form_start(form, { 'attr': {'class': 'col s6'}})  }}
+        {{ form_row(form.name, { 'attr': {'class': 'row'},'label':'Nom'}) }}
 
+        {{ form_row(form.tags, { 'attr': {'class': 'row'},'label':'Tags'}) }}
+        {{ form_row(form.category, { 'attr': {'class': 'row'},'label':'Catégorie'}) }}
+        {{ form_row(form.content, { 'attr': {'class': 'row tinymce'},'label':'Contenu'}) }}
+
+        {{ form_row(form.submit, { 'attr': {'class': 'btn waves-effect waves-light
+'},'label':'Créer'}) }}
+
+        {{ form_end(form) }}
+
+    </div>
     <ul>
         <li>
             <a href="{{ path('article_index') }}">Back to the list</a>
         </li>
     </ul>
+
 {% endblock %}

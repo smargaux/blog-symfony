@@ -68,3 +68,10 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+kms_froala_editor:
+
+  language: "fr"
+  toolbarInline: true
+  tableColors: [ "#FFFFFF", "#333333" ]
+  saveParams: { "id" : "myEditorField" }

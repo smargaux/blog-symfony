@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
 /**
  * Tag controller.
  *
- * @Route("tag")
+ * @Route("tags")
  */
 class TagController extends Controller
 {
