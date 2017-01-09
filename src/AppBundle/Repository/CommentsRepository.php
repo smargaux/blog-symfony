@@ -10,4 +10,13 @@ namespace AppBundle\Repository;
  */
 class CommentsRepository extends \Doctrine\ORM\EntityRepository
 {
+
+  public function getLastFiveArticles(){
+  return $this
+  ->createQueryBuilder('a')
+  ->order('publication_date ASC')
+  ->getQuery()
+  ->setMaxResult(5)
+  ->getArrayResult();
+}
 }

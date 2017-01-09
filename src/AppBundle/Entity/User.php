@@ -3,14 +3,17 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Users
  *
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UsersRepository")
+ *
  */
-class Users
+class User implements UserInterface
 {
     /**
      * @var int
@@ -27,14 +30,6 @@ class Users
      * @ORM\Column(name="username", type="string", length=255, unique=true)
      */
     private $username;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="password", type="string", length=255)
-     */
-    private $password;
-
     /**
      * @var string
      *
@@ -42,6 +37,19 @@ class Users
      */
     private $role;
 
+    /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword;
+
+    /**
+     * The below length depends on the "algorithm" you use for encoding
+     * the password, but this works well with bcrypt.
+     *
+     * @ORM\Column(type="string", length=64)
+     */
+    private $password;
 
     /**
      * Get id
@@ -77,51 +85,38 @@ class Users
         return $this->username;
     }
 
-    /**
-     * Set password
-     *
-     * @param string $password
-     *
-     * @return Users
-     */
-    public function setPassword($password)
+    public function getPlainPassword()
     {
-        $this->password = $password;
-
-        return $this;
+        return $this->plainPassword;
     }
 
-    /**
-     * Get password
-     *
-     * @return string
-     */
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+    }
+
     public function getPassword()
     {
         return $this->password;
     }
 
-    /**
-     * Set role
-     *
-     * @param string $role
-     *
-     * @return Users
-     */
-    public function setRole($role)
+    public function setPassword($password)
     {
-        $this->role = $role;
-
-        return $this;
+        $this->password = $password;
     }
 
-    /**
-     * Get role
-     *
-     * @return string
-     */
-    public function getRole()
+    public function getSalt()
     {
-        return $this->role;
+        return null;
     }
+    public function getRoles()
+   {
+       return array($this->role);
+   }
+
+
+   public function eraseCredentials()
+   {
+   }
+
 }

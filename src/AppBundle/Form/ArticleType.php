@@ -8,7 +8,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use KMS\FroalaEditorBundle\Form\Type;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Ivory\CKEditorBundle\Form\Type\CKEditorType;
+
 class ArticleType extends AbstractType
 {
     /**
@@ -18,7 +21,10 @@ class ArticleType extends AbstractType
     {
         $builder
           ->add('name')
-          ->add('content',FroalaEditorType::class)
+          ->add('content',CKEditorType::class, array(
+'config' => array(
+'uiColor' => '#ffffff',
+)))
           ->add('category',EntityType::class, array(
               'class' => 'AppBundle:Category',
               'choice_label' => 'name',
@@ -29,6 +35,8 @@ class ArticleType extends AbstractType
               'choice_label' => 'name',
               'multiple' => true,
               'expanded' => true,))
+          ->add('publication_date',DateTimeType::class,array('widget' => 'single_text'))
+          ->add('imageFile', FileType::class,array('required' => false))
           ->add('submit',SubmitType::class);
     }
 

@@ -31,32 +31,7 @@ class TagController extends Controller
         ));
     }
 
-    /**
-     * Creates a new tag entity.
-     *
-     * @Route("/new", name="tag_new")
-     * @Method({"GET", "POST"})
-     */
-    public function newAction(Request $request)
-    {
-        $tag = new Tag();
-        $form = $this->createForm('AppBundle\Form\TagType', $tag);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tag);
-            $em->flush($tag);
-
-            return $this->redirectToRoute('tag_show', array('id' => $tag->getId()));
-        }
-
-        return $this->render('tag/new.html.twig', array(
-            'tag' => $tag,
-            'form' => $form->createView(),
-        ));
-    }
-
+  
     /**
      * Finds and displays a tag entity.
      *

@@ -31,31 +31,7 @@ class CategoryController extends Controller
         ));
     }
 
-    /**
-     * Creates a new category entity.
-     *
-     * @Route("/new", name="category_new")
-     * @Method({"GET", "POST"})
-     */
-    public function newAction(Request $request)
-    {
-        $category = new Category();
-        $form = $this->createForm('AppBundle\Form\CategoryType', $category);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($category);
-            $em->flush($category);
-
-            return $this->redirectToRoute('category_show', array('id' => $category->getId()));
-        }
-
-        return $this->render('category/new.html.twig', array(
-            'category' => $category,
-            'form' => $form->createView(),
-        ));
-    }
 
     /**
      * Finds and displays a category entity.

@@ -15,11 +15,11 @@
             </tr>
             <tr>
                 <th>Content</th>
-                <td>{{ article.content }}</td>
+                <td>{{ article.content | raw }}</td>
             </tr>
             <tr>
                 <th>Author</th>
-                <td>{{ article.author }}</td>
+                <td>{{ article.author.username }}</td>
             </tr>
             <tr>
                 <th>Publicationdate</th>
@@ -27,7 +27,7 @@
             </tr>
             <tr>
                 <th>Category</th>
-                <td>{{ article.category }}</td>
+                <td>{{ article.category.name }}</td>
             </tr>
         </tbody>
     </table>

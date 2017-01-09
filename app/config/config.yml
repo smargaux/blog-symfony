@@ -69,9 +69,13 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-kms_froala_editor:
 
-  language: "fr"
-  toolbarInline: true
-  tableColors: [ "#FFFFFF", "#333333" ]
-  saveParams: { "id" : "myEditorField" }
+vich_uploader:
+    db_driver: orm
+    mappings:
+        product_image:
+            uri_prefix:         /images/articles
+            upload_destination: '%kernel.root_dir%/../web/images/articles'
+            delete_on_update:   true
+            delete_on_remove:   true
+            inject_on_load:   true

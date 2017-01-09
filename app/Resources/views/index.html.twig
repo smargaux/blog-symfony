@@ -20,7 +20,7 @@
             <tr>
                 <td><a href="{{ path('article_show', { 'id': article.id }) }}">{{ article.id }}</a></td>
                 <td>{{ article.name }}</td>
-                <td>{{ article.content | raw  }}</td>
+                <td>{{ article.content | raw }}</td>
                 <td>{{ article.author.username }}</td>
                 <td>{% if article.publicationDate %}{{ article.publicationDate|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ article.category.name }}</td>

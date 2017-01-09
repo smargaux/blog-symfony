@@ -1,10 +1,10 @@
 <?php
 
 namespace AppBundle\Entity;
-
+use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Article
@@ -40,9 +40,25 @@ class Article
     /**
      * @var int
      *
-     * @ORM\Column(name="author", type="integer")
-     */
+    *
+    * @ORM\ManyToOne(targetEntity="User")
+    * @ORM\JoinColumn(name="author_id", referencedColumnName="id")
+    */
+
     private $author;
+    /**
+     * @Vich\UploadableField(mapping="article_image", fileNameProperty="imageName")
+     *
+     * @var File
+     */
+      private $imageFile;
+
+  /**
+    * @ORM\Column(type="string", length=255, nullable=true)
+    *
+    * @var string
+    */
+    private $imageName;
 
     /**
      * @var \DateTime
@@ -50,6 +66,14 @@ class Article
      * @ORM\Column(name="publication_date", type="datetime")
      */
     private $publicationDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="maj_date", type="datetime", nullable=true)
+     */
+    private $majDate;
+
 
     /**
      * Many Articles have Many Tags.
@@ -268,5 +292,78 @@ class Article
 
         return $this;
     }
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $image
+     *
+     * @return Product
+     */
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
 
+        //Si l'image est modifiée, on modifie le champs UpdatedAt
+        if ($image) {
+            $this->majDate=new \DateTime('now');
+        }
+        return $this;
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param string $imageName
+     *
+     * @return Product
+     */
+    public function setImageName($imageName)
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImageName()
+    {
+        return $this->imageName;
+    }
+
+
+    /**
+     * Get the value of Maj Date
+     *
+     * @return \DateTime
+     */
+    public function getMajDate()
+    {
+        return $this->majDate;
+    }
+
+    /**
+     * Set the value of Maj Date
+     *
+     * @param \DateTime majDate
+     *
+     * @return self
+     */
+    public function setMajDate(\DateTime $majDate)
+    {
+        $this->majDate = $majDate;
+
+        return $this;
+    }
 }
