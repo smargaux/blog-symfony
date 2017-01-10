@@ -1,5 +1,4 @@
 
 blog-symfony
 
-
-A Symfony project created on January 5, 2017, 2:49 pm.
+Student project : Create a blog using Symfony (routing, validator, security, dql, services, Symfony forms, custom template forms...)
