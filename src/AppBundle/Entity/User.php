@@ -113,7 +113,9 @@ class User implements UserInterface
    {
        return array($this->role);
    }
-
+   public function setRoles($roles){
+      $this->role=$roles;
+   }
 
    public function eraseCredentials()
    {
