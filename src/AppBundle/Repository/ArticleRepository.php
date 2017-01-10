@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * ArticleRepository
  *
@@ -10,18 +12,49 @@ namespace AppBundle\Repository;
  */
 class ArticleRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+ * Récupère les cinq derniers articles publiés (date de publication <=aujourd'hui) pour les afficher sur la page d'accueil
+ */
+  public function getLastFiveArticles()
+  {
+      return $this
+            ->createQueryBuilder('a')
+            ->orderBy('a.publicationDate', 'DESC')
+            ->where('a.publicationDate <= :today')
+            ->setParameter('today', new \DateTime())
+            ->setMaxResults(5)
+            ->getQuery()
+            ->execute();
+  }
 
-  public function getLastFiveArticles(){
-  return $this
-  ->createQueryBuilder('a')
-  ->leftJoin('a.author','au')
-  ->addSelect('au')
-  ->leftJoin('a.category','c')
-  ->addSelect('c')
-  ->leftJoin('a.tags','t')
-  ->addSelect('t')
-  ->orderBy('a.publicationDate','ASC')
-  ->setMaxResults(5)
-  ->getQuery()
-  ->getArrayResult();
-  }}
+/**
+ * Récupère les derniers articles publiés (date de publication <=aujourd'hui), paginé avec 10 articles par page
+ * @param  integer $page    numéro de la page en cours
+ */
+  public function getArticlesList($page=1)
+  {
+      $query =$this->createQueryBuilder('a')
+      ->orderBy('a.publicationDate', 'DESC')
+
+              ->where('a.publicationDate <= :today')
+              ->setParameter('today', new \DateTime())
+              ->setFirstResult(($page-1)*2)
+              ->setMaxResults(2)
+              ->getQuery()
+              ->execute();
+      return $query;
+  }
+
+  /**
+   * Compte les articles publiés pour gérer la pagination
+   */
+  public function getCountArticlesOnline()
+  {
+      return $this ->createQueryBuilder('a')
+                   ->select('count(a.id)')
+                   ->where('a.publicationDate <= :today')
+                   ->setParameter('today', new \DateTime())
+                   ->getQuery()
+                   ->getSingleScalarResult();
+  }
+}

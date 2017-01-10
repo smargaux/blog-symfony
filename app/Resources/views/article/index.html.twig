@@ -2,7 +2,6 @@
 
 {% block body %}
     <h1>Articles list</h1>
-
     <table>
         <thead>
             <tr>
@@ -44,4 +43,24 @@
             <a href="{{ path('article_new') }}">Create a new article</a>
         </li>
     </ul>
+
+
+
+  <ul class="pagination">
+    {% if currentPage == 1 %}
+    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+    {% else %}
+    <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+
+    {% endif %}
+    {% for i in 1..dernierePage %}
+    <li class="waves-effect"><a href="{{path('article_list',{page: i})}}">{{ i }}</a></li>
+
+    {% endfor %}
+    {% if currentPage == dernierePage %}
+    <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+    {% else %}
+    <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+    {% endif %}
+  </ul>
 {% endblock %}
