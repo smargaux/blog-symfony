@@ -93,6 +93,11 @@ class Article
      */
     private $category;
 
+    /**
+     * One Article has many comments
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="article")
+     */
+    private $comments;
 
     /**
      * Get id
@@ -229,6 +234,8 @@ class Article
     public function __construct()
     {
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
 
     /**
@@ -366,4 +373,30 @@ class Article
 
         return $this;
     }
+
+    /**
+     * Get comments
+     *
+     * @return mixed
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Set comments.
+     *
+     * @param mixed comments
+     *
+     * @return self
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+
+        return $this;
+    }
+
+
 }
