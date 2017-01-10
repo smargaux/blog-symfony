@@ -31,18 +31,23 @@
             </tr>
         </tbody>
     </table>
+    {% for comment in comments %}
+    {{ comment.content }}
+    {% endfor %}
 
     <ul>
         <li>
             <a href="{{ path('article_index') }}">Back to the list</a>
         </li>
-        <li>
-            <a href="{{ path('article_edit', { 'id': article.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
     </ul>
+          <div class="row">
+              {{ form_start(commentForm, { 'attr': {'class': 'col s6'}}) }}
+              {{ form_row(commentForm.author, { 'attr': {'class': 'row'},'label':'Auteur'}) }}
+
+              {{ form_row(commentForm.content, { 'attr': {'class': 'row'},'label':'Commentaire'}) }}
+              {{ form_row(commentForm.submit, { 'attr': {'class': 'btn waves-effect waves-light
+      '},'label':'Commenter'}) }}
+            {{ form_end(commentForm) }}
+
+
 {% endblock %}
