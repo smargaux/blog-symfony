@@ -21,8 +21,13 @@
                 <a href="{{ path('homepage') }}" class="brand-logo">Blog </a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li>
-                        <a href="{{ path('article_list') }}">Articles</a>
+                        <a href="{{ path('article_list') }}">  Articles</a>
                     </li>
+                    {% for category in getCategories() %}
+                    <li>
+                        <a href="{{ path('category',{name:category.name}) }}"> {{ category.name }}</a>
+                    </li>
+                    {% endfor %}
                     {% if is_granted('ROLE_ADMIN') %}
                     <li>
                         <a href="{{ path('administration') }}">Administration</a>

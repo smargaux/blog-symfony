@@ -15,26 +15,30 @@
             </tr>
         </thead>
         <tbody>
-        {% for article in articles %}
-            <tr>
-                <td><a href="{{ path('article_show', { 'id': article.id }) }}">{{ article.id }}</a></td>
-                <td>{{ article.name }}</td>
-                <td>{{ article.content | raw  }}</td>
-                <td>{{ article.author.username }}</td>
-                <td>{% if article.publicationDate %}{{ article.publicationDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ article.category.name }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('article_show', { 'id': article.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('article_edit', { 'id': article.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
+            {% for article in articles %}
+                <tr>
+                    <td>
+                        <a href="{{ path('article_show', { 'id': article.id }) }}">{{ article.id }}</a>
+                    </td>
+                    <td>{{ article.name }}</td>
+                    <td>{{ article.content | raw  }}</td>
+                    <td>{{ article.author.username }}</td>
+                    <td>
+                        {% if article.publicationDate %}{{ article.publicationDate|date('Y-m-d H:i:s') }}{% endif %}
+                    </td>
+                    <td>{{ article.category.name }}</td>
+                    <td>
+                        <ul>
+                            <li>
+                                <a href="{{ path('article_show', { 'id': article.id }) }}">show</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('article_edit', { 'id': article.id }) }}">edit</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
@@ -44,23 +48,44 @@
         </li>
     </ul>
 
+    <ul class="pagination">
+        {% if currentPage == 1 %}
+            <li class="disabled">
+                <a href="#!">
+                    <i class="material-icons">chevron_left</i>
+                </a>
+            </li>
+        {% else %}
+            <li class="waves-effect">
+                <a href="#!">
+                    <i class="material-icons">chevron_left</i>
+                </a>
+            </li>
 
+        {% endif %}
+        {% for i in 1..dernierePage %}
+            <li class="waves-effect">
+                {% if app.request.attributes.get('_route_params').name is defined %}
+                <a href="{{path(app.request.attributes.get('_route'),{name:app.request.attributes.get('_route_params').name,page: i})}}">{{ i }}</a>
+                {% else %}
+                <a href="{{path(app.request.attributes.get('_route'),{page: i})}}">{{ i }}</a>
+                {% endif %}
 
-  <ul class="pagination">
-    {% if currentPage == 1 %}
-    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-    {% else %}
-    <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+            </li>
 
-    {% endif %}
-    {% for i in 1..dernierePage %}
-    <li class="waves-effect"><a href="{{path('article_list',{page: i})}}">{{ i }}</a></li>
-
-    {% endfor %}
-    {% if currentPage == dernierePage %}
-    <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-    {% else %}
-    <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-    {% endif %}
-  </ul>
+        {% endfor %}
+        {% if currentPage == dernierePage %}
+            <li class="disabled">
+                <a href="#!">
+                    <i class="material-icons">chevron_right</i>
+                </a>
+            </li>
+        {% else %}
+            <li class="waves-effect">
+                <a href="#!">
+                    <i class="material-icons">chevron_right</i>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
 {% endblock %}

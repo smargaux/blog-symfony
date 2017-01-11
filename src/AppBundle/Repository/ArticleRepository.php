@@ -57,4 +57,41 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
                    ->getQuery()
                    ->getSingleScalarResult();
   }
+
+  /**
+   * Récupère les derniers articles publiés (date de publication <=aujourd'hui), paginé avec 10 articles par page
+   * @param  integer $page    numéro de la page en cours
+   */
+    public function getArticlesByCategory($name,$page=1)
+    {
+        $query =$this->createQueryBuilder('a')
+        ->leftJoin('a.category','c')
+        ->orderBy('a.publicationDate', 'DESC')
+
+                ->where('a.publicationDate <= :today')
+                ->andWhere('c.name LIKE :category')
+                ->setParameter('today', new \DateTime())
+                ->setParameter('category', $name)
+                ->setFirstResult(($page-1)*2)
+                ->setMaxResults(2)
+                ->getQuery()
+                ->execute();
+        return $query;
+    }
+
+    /**
+     * Compte les articles publiés pour gérer la pagination
+     */
+    public function getCountArticlesOnlineByCategory($name)
+    {
+        return $this ->createQueryBuilder('a')
+                     ->select('count(a.id)')
+                     ->leftJoin('a.category','c')
+                     ->where('a.publicationDate <= :today')
+                     ->andWhere('c.name LIKE :category')
+                     ->setParameter('category', $name)
+                     ->setParameter('today', new \DateTime())
+                     ->getQuery()
+                     ->getSingleScalarResult();
+    }
 }

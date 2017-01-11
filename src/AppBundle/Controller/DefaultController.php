@@ -65,4 +65,19 @@ class DefaultController extends Controller
             'article' => $article,'commentForm'=>$commentForm->createView(),'comments'=>$comments
         ));
     }
+
+    /**
+     * @Route("/category/{name}/{page}", name="category")
+     */
+    public function articlesByCategoryAction(Request $request, $name,$page=1)
+    {
+      $articlesCount = $this->getDoctrine()->getRepository('AppBundle:Article')->getCountArticlesOnlineByCategory($name);
+      $countPages=ceil($articlesCount/2);
+
+       $articles = $this->getDoctrine()->getRepository('AppBundle:Article')->getArticlesByCategory($name,$page);
+      return $this->render('article/index.html.twig', array(
+          'articles' => $articles,'dernierePage'=>$countPages,'currentPage'=>$page
+      ));
+
+    }
 }

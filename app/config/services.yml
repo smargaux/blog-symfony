@@ -13,3 +13,9 @@ services:
         tags:
             - { name: twig.extension }
         arguments: ['@app.comments']
+    app.category_extension:
+        class: AppBundle\Twig\CategoryExtension
+        tags:
+            - { name: twig.extension }
+        arguments:
+          doctrine: "@doctrine"
