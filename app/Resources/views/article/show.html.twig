@@ -1,61 +1,69 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Article</h1>
+    <h1>{{ article.name }}</h1>
+    <p>
+        Publié le
+        {% if article.publicationDate %}{{ article.publicationDate|date('d M Y') }}{% endif %}
+        par
+        {{ article.author.username }}
+    </p>
+    <div class="row">
+        <div class="col s8">
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ article.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ article.name }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ article.content | raw }}</td>
-            </tr>
-            <tr>
-                <th>Author</th>
-                <td>{{ article.author.username }}</td>
-            </tr>
-            <tr>
-                <th>Tags</th>
+            {{ article.content | raw }}
+        </div>
+        <div class="col s4">
+            <h4>
+              <i class="material-icons">assignments</i>
+  Tags
+            </h4>
+            <p>
                 {% for tag in article.tags %}
-                <td> {{ tag.name }}</td>
+                    {{ tag.name }}
 
                 {% endfor %}
-            </tr>
-            <tr>
-                <th>Publicationdate</th>
-                <td>{% if article.publicationDate %}{{ article.publicationDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Category</th>
-                <td>{{ article.category.name }}</td>
-            </tr>
-        </tbody>
-    </table>
-    {% for comment in comments %}
-    {{ comment.content }}
-    {% endfor %}
-    {{ getCommentsCount(article.id) }}
+            </p>
+        </div>
+    </div>
+    <th>Content</th>
+    <td></td>
+</tr>
+<tr>
+    <th>Author</th>
+    <td>{{ article.author.username }}</td>
+</tr>
+<tr>
+    <th>Tags</th>
 
-    <ul>
-        <li>
-            <a href="{{ path('article_index') }}">Back to the list</a>
-        </li>
-    </ul>
-          <div class="row">
-              {{ form_start(commentForm, { 'attr': {'class': 'col s6'}}) }}
-              {{ form_row(commentForm.author, { 'attr': {'class': 'row'},'label':'Auteur'}) }}
+</tr>
+<tr>
+    <th>Publicationdate</th>
+    <td></td>
+</tr>
+<tr>
+    <th>Category</th>
+    <td>{{ article.category.name }}</td>
+</tr>
+</tbody>
+</table>
+{% for comment in comments %}
+{{ comment.content }}
+{% endfor %}
+{{ getCommentsCount(article.id) }}
 
-              {{ form_row(commentForm.content, { 'attr': {'class': 'row'},'label':'Commentaire'}) }}
-              {{ form_row(commentForm.submit, { 'attr': {'class': 'btn waves-effect waves-light
+<ul>
+<li>
+<a href="{{ path('article_index') }}">Back to the list</a>
+</li>
+</ul>
+<div class="row">
+{{ form_start(commentForm, { 'attr': {'class': 'col s6'}}) }}
+{{ form_row(commentForm.author, { 'attr': {'class': 'row'},'label':'Auteur'}) }}
+
+{{ form_row(commentForm.content, { 'attr': {'class': 'row'},'label':'Commentaire'}) }}
+{{ form_row(commentForm.submit, { 'attr': {'class': 'btn waves-effect waves-light
       '},'label':'Commenter'}) }}
-            {{ form_end(commentForm) }}
-
+{{ form_end(commentForm) }}
 
 {% endblock %}
