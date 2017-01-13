@@ -15,6 +15,8 @@
             </tr>
         </thead>
         <tbody>
+
+
             {% for article in articles %}
                 <tr>
                     <td>
@@ -48,6 +50,7 @@
         </li>
     </ul>
 
+    <!-- Pagination -->
     <ul class="pagination">
         {% if currentPage == 1 %}
             <li class="disabled">
@@ -63,6 +66,7 @@
             </li>
 
         {% endif %}
+        {# pour chaque page, on ajoute un lien vers celle-ci #}
         {% for i in 1..dernierePage %}
             <li class="waves-effect">
                 {% if app.request.attributes.get('_route_params').name is defined %}

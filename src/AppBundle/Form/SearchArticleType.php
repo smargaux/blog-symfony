@@ -5,12 +5,8 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Ivory\CKEditorBundle\Form\Type\CKEditorType;
 
 class SearchArticleType extends AbstractType
 {
@@ -21,7 +17,11 @@ class SearchArticleType extends AbstractType
     {
         $builder
           ->add('name')
-          ->add('tag');
+          ->add('tag',EntityType::class, array(
+              'class' => 'AppBundle:Tag',
+              'choice_label' => 'name',
+              'multiple' => true,
+              'expanded' => true,) );
     }
 
 

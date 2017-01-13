@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Entity\Article;
 use AppBundle\Entity\Comment;
 use AppBundle\Form\CommentType;
+use AppBundle\Form\SearchArticleType;
 
 class DefaultController extends Controller
 {
@@ -19,8 +20,17 @@ class DefaultController extends Controller
         // Récupération des cinqs derniers articles publiés
         $articles = $this->getDoctrine()->getRepository('AppBundle:Article')->getLastFiveArticles();
 
+        // Formulaire de recherche par nom et/ou tags d'article
+        $formSearch=$this->createForm(SearchArticleType::class);
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $formSearch->getData();
+
+        }
         return $this->render('index.html.twig', [
-            'articles' => $articles,
+            'articles' => $articles, 'searchForm'=>$formSearch->createView()
         ]);
     }
 

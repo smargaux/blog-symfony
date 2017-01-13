@@ -16,6 +16,9 @@
             </tr>
         </thead>
         <tbody>
+          {{ form_start(searchForm) }}
+              {{ form_widget(searchForm) }}
+          {{ form_end(searchForm) }}
         {% for article in articles %}
             <tr>
                 <td><a href="{{ path('article_show', { 'id': article.id }) }}">{{ article.id }}</a></td>
