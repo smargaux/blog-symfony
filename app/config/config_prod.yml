@@ -1,6 +1,6 @@
 imports:
     - { resource: config.yml }
-
+    - { resource: parameters.yml }
 #doctrine:
 #    orm:
 #        metadata_cache_driver: apc
