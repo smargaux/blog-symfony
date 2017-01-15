@@ -10,48 +10,70 @@
         {% block stylesheets %}
 
             <link rel="stylesheet" href="{{ asset('css/materialize.css') }}"/>
+            <link rel="stylesheet" href="{{ asset('css/blog-symfony.css') }}"/>
+
             <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
     </head>
     <body>
-
+    {# Dropdown menu des catégories d'article #}
+      {% if getCategories() %}
+          <ul id="dropdown-categories" class="dropdown-content">
+              {% for category in getCategories() %}
+                  <li>
+                      <a href="{{ path('category',{name:category.name}) }}">
+                          {{ category.name }}</a>
+                  </li>
+              {% endfor %}
+            </ul>
+      {% endif %}
         <nav>
             <div class="nav-wrapper">
-                <a href="{{ path('homepage') }}" class="brand-logo">Blog </a>
+                <a href="{{ path('homepage') }}" class="brand-logo">Blog
+                </a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li>
-                        <a href="{{ path('article_list') }}">  Articles</a>
+                        <a href="{{ path('article_list') }}">
+                            Articles</a>
                     </li>
-                    {% for category in getCategories() %}
                     <li>
-                        <a href="{{ path('category',{name:category.name}) }}"> {{ category.name }}</a>
+                      <a class="dropdown-button" href="#!" data-activates="dropdown-categories">Catégories<i class="material-icons right">arrow_drop_down</i></a>
                     </li>
-                    {% endfor %}
                     {% if is_granted('ROLE_ADMIN') %}
                     <li>
                         <a href="{{ path('administration') }}">Administration</a>
                     </li>
-                    {% endif %}
-                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li>
-                        <a href="{{ path('logout') }}">Se déconnecter </a>
+                        <a href="{{ path('logout') }}">Se déconnecter
+                        </a>
                     </li>
-                    {% else %}
+                {% else %}
                     <li>
                         <a href="{{ path('login') }}">Se connecter</a>
                     </li>
-                    {% endif %}
+                {% endif %}
 
-                </ul>
+            </ul>
+        </div>
+    </nav>
+
+    {% block body %}{% endblock %}
+    {% block javascripts %}
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="{{ asset('js/materialize.min.js') }}"></script>
+
+    {% endblock %}
+
+    <footer class="page-footer">
+        <div class="footer-copyright">
+            <div class="container">
+                Blog réalisé sur Symfony par Margaux SMITS - 2017
             </div>
-        </nav>
+        </div>
+    </footer>
 
-        {% block body %}{% endblock %}
-        {% block javascripts %}
-            <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-            <script type="text/javascript" src="{{ asset('js/materialize.min.js') }}"></script>
-
-        {% endblock %}
-    </body>
+</body>
 </html>

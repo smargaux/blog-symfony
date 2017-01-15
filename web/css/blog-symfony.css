@@ -1,0 +1,17 @@
+/**
+* Navbar
+**/
+
+#dropdown-categories{
+  position: relative !important;
+  top:0 !important;
+  left:0 !important;
+}
+
+/**
+* Liste des articles
+**/
+.article-card{
+  margin: 40px auto !important;
+  float: none !important;
+}
