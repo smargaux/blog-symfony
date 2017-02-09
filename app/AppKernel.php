@@ -17,7 +17,6 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
-            new Vich\UploaderBundle\VichUploaderBundle(),
 
   ];
 

@@ -20,7 +20,7 @@
                         <div class="card-image">
 
                             {% if article.image is defined %}
-                                <img src="{{ asset('images/articles/'.article.image) }}"/>
+                                <img src="{{ asset('images-articles/' ~ article.image) }}"/>
                             {% endif %}
                         </div>
                         <div class="card-stacked">

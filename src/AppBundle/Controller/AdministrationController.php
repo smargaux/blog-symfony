@@ -62,6 +62,20 @@ public function newArticleAction(Request $request)
     if ($form->isSubmitted() && $form->isValid()) {
         // On récupère l'utilisateur connecté pour l'assigner en tant qu'auteur de l'article
         $article->setAuthor($this->getUser());
+        $file = $article->getImage();
+        // Generate a unique name for the file before saving it
+        $fileName = $article->getName().date('Y-m-d').'.'.$file->guessExtension();
+
+        // Move the file to the directory where brochures are stored
+        $file->move(
+            $this->getParameter('images_directory'),
+            $fileName
+        );
+
+        // Update the 'brochure' property to store the PDF file name
+        // instead of its contents
+        $article->setImage($fileName);
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($article);
         $em->flush($article);

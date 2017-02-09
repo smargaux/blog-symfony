@@ -9,6 +9,7 @@
         {{ article.author.username }}
     </p>
     <div class="row">
+      <img src="{{ asset('images-articles/' ~ article.image) }}" alt="{{ article.name }}"/>
         <div class="col s8">
 
             {{ article.content | raw }}
@@ -65,5 +66,5 @@
 {{ form_row(commentForm.submit, { 'attr': {'class': 'btn waves-effect waves-light
       '},'label':'Commenter'}) }}
 {{ form_end(commentForm) }}
-
+</div>
 {% endblock %}
