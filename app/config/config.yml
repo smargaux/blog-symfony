@@ -7,7 +7,7 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-
+    images_directory: '%kernel.root_dir%/../web/images-articles'
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
@@ -68,14 +68,3 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-
-
-vich_uploader:
-    db_driver: orm
-    mappings:
-        product_image:
-            uri_prefix:         /images/articles
-            upload_destination: '%kernel.root_dir%/../web/images/articles'
-            delete_on_update:   true
-            delete_on_remove:   true
-            inject_on_load:   true

@@ -1,50 +1,123 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Articles list</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Content</th>
-                <th>Author</th>
-                <th>Publicationdate</th>
-                <th>Category</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-          {{ form_start(searchForm) }}
-              {{ form_widget(searchForm) }}
-          {{ form_end(searchForm) }}
+    <h1>Les derniers articles</h1>
+
+    <div class="section">
+      <div class="row">
+        <div class="col s12 articles-homepage">
+
         {% for article in articles %}
-            <tr>
-                <td><a href="{{ path('article_show', { 'id': article.id }) }}">{{ article.id }}</a></td>
-                <td>{{ article.name }}</td>
-                <td>{{ article.content | raw }}</td>
-                <td>{{ article.author.username }}</td>
-                <td>{% if article.publicationDate %}{{ article.publicationDate|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ article.category.name }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('article_show', { 'id': article.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('article_edit', { 'id': article.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+          {% if loop.last %}
+          <div class="row">
 
-    <ul>
-        <li>
-            <a href="{{ path('article_new') }}">Create a new article</a>
-        </li>
-    </ul>
+          <div class="col s6  offset-s3 article-card">
+            <h2 class="header"><a href="{{ path("article_show",{ 'id': article.id}) }}">{{ article.name }}</a></h2>                  <small>
+                                  Publié le
+                                  {% if article.publicationDate %}{{ article.publicationDate|date('d M Y') }}{% endif %}
+
+                              </small>
+              <div class="card horizontal">
+
+                  <div class="card-image">
+
+                    {% if article.image %}
+                    {# Si une image a été ajoutée pour l'article on l'utilise, sinon on utilise une image noire par défaut #}
+                     <img src="{{ asset('images-articles/' ~ article.image) }}" alt="{{ article.name }}"/>
+                     {% else %}
+                     <img src="{{ asset('images-articles/no-image.png') }}" alt="{{ article.name }}"/>
+
+                    {% endif %}
+                  </div>
+                  <div class="card-stacked">
+                      <div class="card-content">
+                          <p>
+                              {{ (article.content|slice(0,200))|raw }}
+                              <a href="{{ path("article_show",{'id':article.id}) }}">Lire plus</a>
+
+                          </p>
+                          <p>
+                              {{ getCommentsCount(article.id)}}
+                              commentaire(s).
+                          </p>
+                          <p>
+                              {{ article.category.name }}
+                          </p>
+                          <p>
+                              {% if article.tags %}
+                                  {% for tag in article.tags %}
+                                      {{ tag.name }},
+                                  {% endfor %}
+                              {% endif %}
+                          </p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          </div>
+          {% else %}
+          {% if loop.index is odd %}
+
+            <div class="row">
+              <div class="col s3 offset-s3 article-card">
+                {% else %}
+                <div class="col s3 article-card">
+
+          {% endif %}
+            <h2 class="header"><a href="{{ path("article_show",{ 'id': article.id}) }}">{{ article.name }}</a></h2>                  <small>
+                                  Publié le
+                                  {% if article.publicationDate %}{{ article.publicationDate|date('d M Y') }}{% endif %}
+
+                              </small>
+              <div class="card horizontal">
+
+                  <div class="card-image">
+
+                    {% if article.image %}
+                    {# Si une image a été ajoutée pour l'article on l'utilise, sinon on utilise une image noire par défaut #}
+                     <img src="{{ asset('images-articles/' ~ article.image) }}" alt="{{ article.name }}"/>
+                     {% else %}
+                     <img src="{{ asset('images-articles/no-image.png') }}" alt="{{ article.name }}"/>
+
+                    {% endif %}
+                  </div>
+                  <div class="card-stacked">
+                      <div class="card-content">
+                          <p>
+                              {{ (article.content|slice(0,200))|raw }}
+                              <a href="{{ path("article_show",{'id':article.id}) }}">Lire plus</a>
+
+                          </p>
+                          <p>
+                              {{ getCommentsCount(article.id)}}
+                              commentaire(s).
+                          </p>
+                          <p>
+                              {{ article.category.name }}
+                          </p>
+                          <p>
+                              {% if article.tags %}
+                                  {% for tag in article.tags %}
+                                      {{ tag.name }},
+                                  {% endfor %}
+                              {% endif %}
+                          </p>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          {% if loop.index is even %}
+            </div>
+          {% endif %}
+          {% endif %}
+
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  </div>
+    </div>
+
 {% endblock %}

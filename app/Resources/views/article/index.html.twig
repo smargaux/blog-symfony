@@ -1,54 +1,71 @@
 {% extends 'base.html.twig' %}
-
 {% block body %}
-    <h1>Articles list</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Content</th>
-                <th>Author</th>
-                <th>Publicationdate</th>
-                <th>Category</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
 
+    <h1>Tous les articles
+    </h1>
+    <div class="section">
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('article_new') }}">Créer un nouvel article
+            </a>
+        {% endif %}
+        {% for article in articles %}
 
-            {% for article in articles %}
-                <tr>
-                    <td>
-                        <a href="{{ path('article_show', { 'id': article.id }) }}">{{ article.id }}</a>
-                    </td>
-                    <td>{{ article.name }}</td>
-                    <td>{{ article.content | raw  }}</td>
-                    <td>{{ article.author.username }}</td>
-                    <td>
-                        {% if article.publicationDate %}{{ article.publicationDate|date('Y-m-d H:i:s') }}{% endif %}
-                    </td>
-                    <td>{{ article.category.name }}</td>
-                    <td>
-                        <ul>
-                            <li>
-                                <a href="{{ path('article_show', { 'id': article.id }) }}">show</a>
-                            </li>
-                            <li>
-                                <a href="{{ path('article_edit', { 'id': article.id }) }}">edit</a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            <div class="row">
+                <div class="col s6 articles-list-card">
+                    <h2 class="header">{{ article.name }}
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a href="{{ path('article_edit', { 'id': article.id }) }}">Modifier l'article
+                            </a>
+                        {% endif %}
+                    </h2>
+                    <a href="{{ path("article_show",{ 'id': article.id}) }}"></a>
 
-    <ul>
-        <li>
-            <a href="{{ path('article_new') }}">Create a new article</a>
-        </li>
-    </ul>
+                    <p>
+                        Publié le
+                        {{ article.publicationDate|date('d M Y') }}
+                        par
+                        {{ article.author.username }}
+
+                    </p>
+                    <div class="card horizontal">
+
+                        <div class="card-image">
+                          {% if article.image %}
+                          {# Si une image a été ajoutée pour l'article on l'utilise, sinon on utilise une image noire par défaut #}
+                           <img src="{{ asset('images-articles/' ~ article.image) }}" alt="{{ article.name }}"/>
+                           {% else %}
+                           <img src="{{ asset('images-articles/no-image.png') }}" alt="{{ article.name }}"/>
+
+                          {% endif %}
+                        </div>
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <p>
+                                    {{ (article.content|slice(0,200))|raw }}
+                                    <a href="{{ path("article_show",{'id':article.id}) }}">Lire plus</a>
+
+                                </p>
+                                <p>
+                                    {{ getCommentsCount(article.id)}}
+                                    commentaire(s).
+                                </p>
+                                <p>
+                                    {{ article.category.name }}
+                                </p>
+                                <p>
+                                    {% if article.tags %}
+                                        {% for tag in article.tags %}
+                                            {{ tag.name }},
+                                        {% endfor %}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
     <!-- Pagination -->
     <ul class="pagination">
@@ -60,7 +77,11 @@
             </li>
         {% else %}
             <li class="waves-effect">
-                <a href="#!">
+                {% if app.request.attributes.get('_route_params').name is defined %}
+                    <a href="{{path(app.request.attributes.get('_route'),{name:app.request.attributes.get('_route_params').name,page: currentPage - 1})}}">
+                    {% else %}
+                        <a href="{{path(app.request.attributes.get('_route'),{page: currentPage - 1})}}">
+                  {% endif %}
                     <i class="material-icons">chevron_left</i>
                 </a>
             </li>
@@ -70,9 +91,9 @@
         {% for i in 1..dernierePage %}
             <li class="waves-effect">
                 {% if app.request.attributes.get('_route_params').name is defined %}
-                <a href="{{path(app.request.attributes.get('_route'),{name:app.request.attributes.get('_route_params').name,page: i})}}">{{ i }}</a>
+                    <a href="{{path(app.request.attributes.get('_route'),{name:app.request.attributes.get('_route_params').name,page: i})}}">{{ i }}</a>
                 {% else %}
-                <a href="{{path(app.request.attributes.get('_route'),{page: i})}}">{{ i }}</a>
+                    <a href="{{path(app.request.attributes.get('_route'),{page: i})}}">{{ i }}</a>
                 {% endif %}
 
             </li>
@@ -86,7 +107,11 @@
             </li>
         {% else %}
             <li class="waves-effect">
-                <a href="#!">
+                {% if app.request.attributes.get('_route_params').name is defined %}
+                    <a href="{{path(app.request.attributes.get('_route'),{name:app.request.attributes.get('_route_params').name,page: currentPage + 1})}}">
+                    {% else %}
+                        <a href="{{path(app.request.attributes.get('_route'),{page: currentPage + 1})}}">
+                {% endif %}
                     <i class="material-icons">chevron_right</i>
                 </a>
             </li>

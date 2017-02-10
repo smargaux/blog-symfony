@@ -77,7 +77,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/category/{name}/{page}", name="category")
+     * @Route("/categorie/{name}/{page}", name="category")
      */
     public function articlesByCategoryAction(Request $request, $name,$page=1)
     {
