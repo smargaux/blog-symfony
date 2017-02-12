@@ -29,9 +29,9 @@ class DefaultController extends Controller
             $formSearch->getData();
 
         }
-        return $this->render('index.html.twig', [
+        return $this->render('index.html.twig', array(
             'articles' => $articles, 'searchForm'=>$formSearch->createView()
-        ]);
+        ));
     }
 
     /**
@@ -39,12 +39,18 @@ class DefaultController extends Controller
      */
     public function articlesListAction(Request $request, $page=1)
     {
+      // On compte le nombre d'articles en ligne (date de publication <= aujourd'hui)
       $articlesCount = $this->getDoctrine()->getRepository('AppBundle:Article')->getCountArticlesOnline();
-      $countPages=ceil($articlesCount/2);
+      // On compte le nombre page pour 10 articles par pages
+      $countPages=ceil($articlesCount/10);
+
+      // Formulaire de recherche par nom et/ou tags d'article
+      $formSearch=$this->createForm(SearchArticleType::class);
+      $formSearch->handleRequest($request);
 
        $articles = $this->getDoctrine()->getRepository('AppBundle:Article')->getArticlesList($page);
       return $this->render('article/index.html.twig', array(
-          'articles' => $articles,'dernierePage'=>$countPages,'currentPage'=>$page
+          'articles' => $articles,'dernierePage'=>$countPages,'currentPage'=>$page,'searchForm'=>$formSearch->createView()
       ));
 
     }

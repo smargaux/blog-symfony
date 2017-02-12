@@ -14,18 +14,12 @@
             <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+        <script type="text/javascript" src="{{ asset('js/jquery-3.1.1.min.js')}} "></script>
+        <script type="text/javascript" src="{{ asset('js/materialize.min.js') }}"></script>
     </head>
     <body>
-    {% if getCategories() is not null %}
-    <ul id="dropdown-categories" class="dropdown-content">
-    {% for category in getCategories() %}
-      <li><a href="{{ path('category',{name:category.name}) }}"> {{ category.name }}</a></li>
-    {% endfor %}
-    </ul>
-    {% endif %}
 
     {# Dropdown menu des catégories d'article #}
-      {% if getCategories() %}
           <ul id="dropdown-categories" class="dropdown-content">
               {% for category in getCategories() %}
                   <li>
@@ -34,26 +28,21 @@
                   </li>
               {% endfor %}
             </ul>
-      {% endif %}
     <header class="mdl-layout__header mdl-layout__header--waterfall site-header">
-      <div aria-expanded="false" role="button" tabindex="0" class="mdl-layout__drawer-button mdl-layout--small-screen-only">
-        <i class="material-icons"></i>
-      </div>
+
       <div class="mdl-layout__header-row site-logo-row">
         <span class="mdl-layout__title">
           <div class="site-logo">
-            <a href="{{ path('homepage') }}" class="brand-logo">Blog</a>
+            <a href="{{ path('homepage') }}" class="brand-logo"><img src="{{ asset('images/header-blog.png') }}" alt='logo-blog'></a>
           </div>
-          <span class="site-description">Material Design Portfolio</span>
         </span>
       </div>
       <div class="mdl-layout__header-row site-navigation-row mdl-layout--large-screen-only">
         <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
                         <a class="mdl-navigation__link" href="{{ path('article_list') }}">
                             Articles</a>
-                            {% if getCategories() is not null %}
-
-                      <a class="dropdown-button mdl-navigation__link" href="#!" data-activates="dropdown-categories">Catégories<i class="material-icons right">arrow_drop_down</i></a>
+                      {% if getCategories() is not empty %}
+                        <a class="dropdown-button mdl-navigation__link" href="#" data-activates="dropdown-categories">Catégories<i class="material-icons right">arrow_drop_down</i></a>
                       {% endif %}
 
                     {% if is_granted('ROLE_ADMIN') %}
@@ -71,9 +60,7 @@
 
         {% block body %}{% endblock %}
         {% block javascripts %}
-            <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-            <script type="text/javascript" src="{{ asset('js/materialize.min.js') }}"></script>
-            <script type="text/javascript" src="{{ asset('js/picker.date.js') }}"></script>
+
 
             <script>
             $( document ).ready(function(){

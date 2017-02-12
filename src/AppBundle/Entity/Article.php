@@ -302,7 +302,7 @@ class Article
     }
 
     /**
-     * @return string|null
+     * @return mixed
      */
     public function getImage()
     {

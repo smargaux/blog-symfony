@@ -19,21 +19,15 @@
            </div>
            <div class="card-content">
              {# contenu de l'article avec mise en page HTML #}
-             <blockquote>
              {{ article.content | raw }}
-            </blockquote>
            <div class="card-action">
              <p>Commentaires</p>
              {% if getCommentsCount(article.id) > 0 %}
                {% for comment in comments %}
                <div class="card horizontal">
-                 <span class="card-title"> <strong >{{ comment.author }} :</strong></title>
-                   <div class="card-content">
-                     <blockquote>
+                 <u><strong style="font-size:18px !important">{{ comment.author }}  le <small> {{ comment.date|date('d/M/Y',"Europe/Paris") }} à {{ comment.date|date('H\\hi') }} </small>:</strong></u><br/></br>
+                     <blockquote style="font-size:14px !important">
                      {{ comment.content }}
-                   </blockquote>
-
-                   </div>
               </div>
                 {% endfor %}
              {% else %}
@@ -55,19 +49,24 @@
          </div>
        </div>
      </div>
-    <div class="col s12 m2">
-      <div class="col s4">
-            <h4>
-                <i class="material-icons">assignments</i>
-                Tags
-            </h4>
+    <div class="col s2 m2">
+      <h5><span class="material-icons">label</span><strong>Catégorie</strong></h5>
+      <p> {{ article.category.name}} </p>
+            <h5><span class="material-icons">assignments</span><strong>Tag(s)</strong></h5>
             <p>
                 {% for tag in article.tags %}
                     {{ tag.name }}
-
+                    {% if loop.last %}
+                    {% else %}
+                    ,
+                    {% endif %}
                 {% endfor %}
             </p>
-        </div>
+            <br/>
+            {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('article_edit',{ 'id': article.id }) }}"><button class="btn waves-effect waves-light" type="submit" name="action">Modifier l'article
+          </button></a><br/>
+            {% endif %}
     </div>
 </div>
 {% endblock %}

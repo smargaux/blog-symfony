@@ -14,24 +14,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
  */
 class TagController extends Controller
 {
-    /**
-     * Lists all tag entities.
-     *
-     * @Route("/", name="tag_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
+    
 
-        $tags = $em->getRepository('AppBundle:Tag')->findAll();
-
-        return $this->render('tag/index.html.twig', array(
-            'tags' => $tags,
-        ));
-    }
-
-  
     /**
      * Finds and displays a tag entity.
      *
@@ -48,30 +32,7 @@ class TagController extends Controller
         ));
     }
 
-    /**
-     * Displays a form to edit an existing tag entity.
-     *
-     * @Route("/{id}/edit", name="tag_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, Tag $tag)
-    {
-        $deleteForm = $this->createDeleteForm($tag);
-        $editForm = $this->createForm('AppBundle\Form\TagType', $tag);
-        $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('tag_edit', array('id' => $tag->getId()));
-        }
-
-        return $this->render('tag/edit.html.twig', array(
-            'tag' => $tag,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
 
     /**
      * Deletes a tag entity.

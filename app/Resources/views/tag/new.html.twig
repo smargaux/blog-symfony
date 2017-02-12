@@ -1,16 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Tag creation</h1>
+<div class="row">
+    <h1>Nouveau tag</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+    {{ form_start(form, { 'attr': {'class': 'col s12 centered'}}) }}
+    {{ form_row(form.name, { 'attr': {'class': 'row'},'label':'Nom'}) }}
+    {{ form_row(form.submit, { 'attr': {'class': 'btn waves-effect waves-light
+'},'label':'Ajouter'}) }}
+
     {{ form_end(form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('tag_index') }}">Back to the list</a>
-        </li>
-    </ul>
+</div>
 {% endblock %}

@@ -36,7 +36,8 @@ class ArticleType extends AbstractType
               'multiple' => true,
               'expanded' => true,))
           ->add('publication_date',DateTimeType::class,array('widget' => 'single_text'))
-          ->add('image', FileType::class, array('label' => 'Image à la une'))
+          ->add('image', FileType::class, array('label' => 'Image à la une', 'data_class' => null
+))
           ->add('submit',SubmitType::class);
     }
 

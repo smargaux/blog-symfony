@@ -1,16 +1,88 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Article edit</h1>
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-    {{ form_end(edit_form) }}
+    <div class="row">
+        <h1 align="center">Modifier un article</h1>
 
-    <ul>
-        <li>
-            <a href="{{ path('article_index') }}">Back to the list</a>
-        </li>
+        {{ form_start(edit_form, { 'attr': {'class': 'col s12 centered'}}) }}
+        {{ form_row(edit_form.name, { 'attr': {'class': 'row'},'label':'Nom'}) }}
 
-    </ul>
+        {{ form_row(edit_form.tags, { 'attr': {'class': 'row'},'label':'Tags'}) }}
+        {{ form_row(edit_form.category, { 'attr': {'class': 'row'},'label':'Catégorie'}) }}
+        {{ form_row(edit_form.content, { 'attr': {'class': 'row fr-view'},'label':'Contenu'}) }}
+        <div class="row">
+        {{ form_row(edit_form.image,{'attr':{'class' :'file-field input-field file-path-wrapper col s6'},'label':'Image ','required':false})}}
+        <img class="col s6" src="{{ asset('images-articles/'~ article.image)}}" alt="{{ article.name }}" />
+      </div>
+        {{ form_row(edit_form.publication_date,{'attr':{'class' :'datepicker','type':'datetime'},'label':'Date de publication '})}}
+        {{ form_row(edit_form.submit, { 'attr': {'class': 'btn waves-effect waves-light
+'},'label':'Créer'}) }}
+
+        {{ form_end(edit_form) }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        jQuery('.datepicker').pickadate({
+            selectMonths: true,
+            selectYears: 15,
+            format: 'yyyy-mm-dd',
+            closeOnSelect: true,
+            monthsFull: [
+                'Janvier',
+                'Février',
+                'Mars',
+                'Avril',
+                'Mai',
+                'Juin',
+                'Juillet',
+                'Août',
+                'Septembre',
+                'Octobre',
+                'Novembre',
+                'Décembre'
+            ],
+            monthsShort: [
+                'Jan',
+                'Fev',
+                'Mar',
+                'Avr',
+                'Mai',
+                'Jun',
+                'Jul',
+                'Aou',
+                'Sep',
+                'Oct',
+                'Nov',
+                'Dec'
+            ],
+            weekdaysFull: [
+                'Dimanche',
+                'Lundi',
+                'Mardi',
+                'Mercredi',
+                'Jeudi',
+                'Vendredi',
+                'Samedi'
+            ],
+            weekdaysShort: [
+                'Dim',
+                'Lun',
+                'Mar',
+                'Mer',
+                'Jeu',
+                'Ven',
+                'Sam'
+            ],
+            today: 'Aujourd\'hui',
+            clear: 'Effacer',
+            close: 'Fermer',
+            firstDay: 1,
+            labelMonthNext: 'Mois suivnat',
+            labelMonthPrev: 'Mois précédent',
+            labelMonthSelect: 'Choisir un mois',
+            labelYearSelect: 'Choisir une année'
+        });
+    </script>
 {% endblock %}

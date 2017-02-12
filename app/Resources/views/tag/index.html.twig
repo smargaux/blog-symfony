@@ -1,39 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Tags list</h1>
+<div class="row">
+  <div class="col s12">
 
+    <h1 align="center">Tags</h1>
+    <a href="{{ path('tag_new')}}"><button class="btn waves-effect waves-light" type="submit" name="action">Nouveau tag
+  </button></a>
     <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for tag in tags %}
-            <tr>
-                <td><a href="{{ path('tag_show', { 'id': tag.id }) }}">{{ tag.id }}</a></td>
-                <td>{{ tag.name }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('tag_show', { 'id': tag.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('tag_edit', { 'id': tag.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
+       <thead>
+         <tr>
+             <th data-field="id">Identifiant</th>
+             <th data-field="name">Nom</th>
+             <th></th>
+         </tr>
+       </thead>
+
+       <tbody>
+         {% for tag in tags %}
+             <tr>
+                 <td>{{ tag.id }}</td>
+                 <td>{{ tag.name }}</td>
+                 <td><a href="{{ path('tag_edit', { 'id': tag.id }) }}">Modifier</a></td>
+             </tr>
+         {% endfor %}
+
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('tag_new') }}">Create a new tag</a>
-        </li>
-    </ul>
+  </div>
+</div>
 {% endblock %}

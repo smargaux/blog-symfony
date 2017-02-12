@@ -6,19 +6,29 @@
     /*position: relative !important;
     left: 0 !important;*/
     top: 265px !important;
-
 }
-
-
+footer{
+  background-color: rgb(120, 43, 96) !important;
+}
+ a{
+   color : #d292a8 !important;
+ }
 /**
 * Liste des articles
 **/
+header{
+  overflow: visible !important;
+  background-color: rgb(120, 43, 96) !important;
+}
 
 .articles-list-card {
     margin: 0 auto !important;
     float : none !important;
 }
-
+ .centered{
+   margin: 0 auto !important;
+   float : none !important;
+ }
 .articles-homepage{
   margin: 0 auto !important;
   float : none !important;
@@ -28,7 +38,9 @@ body {
     min-height: 100vh;
     flex-direction: column;
 }
-
+blockquote{
+  border-left: none !important;
+}
 main {
     flex: 1 0 auto;
 }
