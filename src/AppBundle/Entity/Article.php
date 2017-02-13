@@ -27,13 +27,19 @@ class Article
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     */
+     *  @Assert\NotNull(
+      * message=" Veuillez renseigner un titre pour votre article")
+      *
+      */
     private $name;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text")
+     * @Assert\NotNull(
+     * message="Veuillez ajouter un contenu à votre article")
+     *
      */
     private $content;
 
@@ -58,6 +64,9 @@ class Article
      * @var \DateTime
      *
      * @ORM\Column(name="publication_date", type="datetime")
+     *@Assert\NotNull(
+     * message="Veuillez saisir une date de publication")
+     *
      */
     private $publicationDate;
 
@@ -76,6 +85,9 @@ class Article
      *      joinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
      *      )
+     * @Assert\Count(
+     *    min = 1,
+     *    minMessage = "Vous devez sélectionner au moins {{ limit }} tag")
      */
     private $tags;
 
@@ -90,6 +102,7 @@ class Article
     /**
      * One Article has many comments
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="article")
+     *@Assert\NotNull()
      */
     private $comments;
 

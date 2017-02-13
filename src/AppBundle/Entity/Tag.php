@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Tag
@@ -23,7 +24,8 @@ class Tag
 
     /**
      * @var string
-     *
+     *@Assert\NotNull(
+    * message=" Veuillez renseigner un nom pour votre tag")
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;

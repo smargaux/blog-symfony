@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Comments
@@ -23,14 +24,16 @@ class Comment
 
     /**
      * @var string
-     *
+   * @Assert\NotNull(
+      * message=" Veuillez renseigner votre nom")
      * @ORM\Column(name="author", type="string", length=255)
      */
     private $author;
 
     /**
      * @var string
-     *
+     *@Assert\NotNull(
+    * message=" Veuillez saisir un commentaire")
      * @ORM\Column(name="content", type="text")
      */
     private $content;
@@ -45,7 +48,7 @@ class Comment
     /**
      * @var Article
      *
-     * @ORM\ManyToOne(targetEntity="Article")
+     * @ORM\ManyToOne(targetEntity="Article", inversedBy="comments")
      * @ORM\JoinColumn(name="article_id", referencedColumnName="id")
      */
     private $article;
