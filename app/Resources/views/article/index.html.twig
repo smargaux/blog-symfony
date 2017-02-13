@@ -1,21 +1,26 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 
-    <h1 align="center">Tous les articles
-    </h1>
+
     <div class="section">
         {% if is_granted('ROLE_ADMIN') %}
-        <a align="center" href="{{ path('article_new')}}"><button class="btn waves-effect waves-light" type="submit" name="action">Écrire un article
+        <a style="float:right" align="center" href="{{ path('article_new')}}"><button class="btn waves-effect waves-light" type="submit" name="action">Écrire un article
       </button></a><br/>
         {% endif %}
-        {{ form_start(searchForm, { 'attr': {'class': 'col s12 centered'}}) }}
-        {{ form_row(searchForm.name, { 'attr': {'class': 'row'},'label':'Nom'}) }}
-        {{ form_row(searchForm.tags) }}
 
-        {{ form_row(searchForm.submit, { 'attr': {'class': 'btn waves-effect waves-light
-    '},'label':'Ajouter'}) }}
+        <div class="row">
+          <div class="col s2">
+            {{ form_start(searchForm, { 'attr': {'class': 'col s12 centered'}}) }}
+            {{ form_row(searchForm.name, { 'attr': {'class': 'row'},'label':'Nom'}) }}
+            {{ form_row(searchForm.tags) }}
 
-        {{ form_end(searchForm) }}
+            {{ form_row(searchForm.submit, { 'attr': {'class': 'btn waves-effect waves-light
+        '},'label':'Rechercher'}) }}
+
+            {{ form_end(searchForm) }}
+          </div>
+          <div class="col s10">
+
 
         {% if articles %}
         {% for article in articles %}
@@ -79,8 +84,11 @@
                 </div>
             </div>
         {% endfor %}
+      </div>
     </div>
-
+    </div>
+{# On affiche la pagination que si celle-ci est définie #}
+{% if currentPage is defined %}
     <!-- Pagination -->
     <ul class="pagination">
         {% if currentPage == 1 %}
@@ -127,6 +135,7 @@
             </li>
         {% endif %}
     </ul>
+    {% endif %}
     {% else %}
     Il n'y a aucun article.
     {% endif %}

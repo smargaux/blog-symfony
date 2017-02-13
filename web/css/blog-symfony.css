@@ -7,6 +7,9 @@
     left: 0 !important;*/
     top: 265px !important;
 }
+[type="checkbox"] + label{
+  display: block !important;
+}
 footer{
   background-color: rgb(120, 43, 96) !important;
 }

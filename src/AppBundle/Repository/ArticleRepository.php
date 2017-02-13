@@ -38,13 +38,34 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
 
               ->where('a.publicationDate <= :today')
               ->setParameter('today', new \DateTime())
-              ->setFirstResult(($page-1)*2)
-              ->setMaxResults(2)
+              ->setFirstResult(($page-1)*10)
+              ->setMaxResults(10)
               ->getQuery()
               ->execute();
       return $query;
   }
 
+  /**
+   * Récupère les derniers articles publiés (date de publication <=aujourd'hui), paginé avec 10 articles par page
+   * selon les critères nom et tags choisis
+   * @param  integer $page    numéro de la page en cours
+   */
+    public function getArticlesBySearchList($page,$name,$tags)
+    {
+        $query =$this->createQueryBuilder('a')
+                ->leftJoin('a.tags','t')
+                ->where('a.publicationDate <= :today')
+                ->andWhere('a.name LIKE :name')
+                ->andWhere('t.id IN (:tags)')
+                ->setParameter('today', new \DateTime())
+                ->setParameter('name', '%'.$name.'%')
+                ->setParameter('tags', $tags)
+                ->setFirstResult(($page-1)*10)
+                ->setMaxResults(10)
+                ->getQuery()
+                ->execute();
+        return $query;
+    }
   /**
    * Compte les articles publiés pour gérer la pagination
    */
@@ -59,25 +80,46 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
   }
 
   /**
-   * Récupère les derniers articles publiés (date de publication <=aujourd'hui), paginé avec 10 articles par page
+   * Récupère les derniers articles publiés  des résultats de la recherche (date de publication <=aujourd'hui), paginé avec 10 articles par page
    * @param  integer $page    numéro de la page en cours
    */
     public function getArticlesByCategory($name,$page=1)
     {
         $query =$this->createQueryBuilder('a')
-        ->leftJoin('a.category','c')
-        ->orderBy('a.publicationDate', 'DESC')
-
-                ->where('a.publicationDate <= :today')
-                ->andWhere('c.name LIKE :category')
-                ->setParameter('today', new \DateTime())
-                ->setParameter('category', $name)
-                ->setFirstResult(($page-1)*2)
-                ->setMaxResults(2)
-                ->getQuery()
-                ->execute();
+                    ->leftJoin('a.category','c')
+                    ->orderBy('a.publicationDate', 'DESC')
+                    ->where('a.publicationDate <= :today')
+                    ->andWhere('c.name LIKE :category')
+                    ->setParameter('today', new \DateTime())
+                    ->setParameter('category', $name)
+                    ->setFirstResult(($page-1)*10)
+                    ->setMaxResults(10)
+                    ->getQuery()
+                    ->execute();
         return $query;
     }
+    /**
+     * Récupère les derniers articles publiés  des résultats de la recherche (date de publication <=aujourd'hui), paginé avec 10 articles par page
+     * @param  integer $page    numéro de la page en cours
+     */
+      public function getArticlesBySearchCategory($name,$tags,$nameArticle)
+      {
+          $query =$this->createQueryBuilder('a')
+                      ->leftJoin('a.category','c')
+                      ->leftJoin('a.tags','t')
+                      ->orderBy('a.publicationDate', 'DESC')
+                      ->where('a.publicationDate <= :today')
+                      ->andWhere('c.name LIKE :category')
+                      ->andWhere('a.name LIKE :name')
+                      ->andWhere('t.id IN (:tags)')
+                      ->setParameter('today', new \DateTime())
+                      ->setParameter('category', $name)
+                      ->setParameter('name', '%'.$nameArticle.'%')
+                      ->setParameter('tags', $tags)
+                      ->getQuery()
+                      ->execute();
+          return $query;
+      }
 
     /**
      * Compte les articles publiés pour gérer la pagination
@@ -94,4 +136,6 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
                      ->getQuery()
                      ->getSingleScalarResult();
     }
+
+
 }

@@ -39,19 +39,44 @@ class DefaultController extends Controller
      */
     public function articlesListAction(Request $request, $page=1)
     {
-      // On compte le nombre d'articles en ligne (date de publication <= aujourd'hui)
-      $articlesCount = $this->getDoctrine()->getRepository('AppBundle:Article')->getCountArticlesOnline();
-      // On compte le nombre page pour 10 articles par pages
-      $countPages=ceil($articlesCount/10);
+
 
       // Formulaire de recherche par nom et/ou tags d'article
       $formSearch=$this->createForm(SearchArticleType::class);
       $formSearch->handleRequest($request);
+      if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+        // On récupère les données du formulaire
+        $data=$request->request->get("search_article");
 
-       $articles = $this->getDoctrine()->getRepository('AppBundle:Article')->getArticlesList($page);
-      return $this->render('article/index.html.twig', array(
-          'articles' => $articles,'dernierePage'=>$countPages,'currentPage'=>$page,'searchForm'=>$formSearch->createView()
-      ));
+        if (array_key_exists('name', $data)){
+          $name = $data['name'];
+        }else{
+          $name ="";
+        }
+        // Si aucun tag n'est sélectionné on les récupère tous pour ne pas fausser la recherche
+
+        if (array_key_exists('tags', $data)){
+           $tags = $data['tags'];
+        }else{
+          $tags=$this->getDoctrine()->getRepository('AppBundle:Tag')->findAll();
+        }
+
+        $articles = $this->getDoctrine()->getRepository('AppBundle:Article')->getArticlesBySearchList($page,$name,$tags);
+        // On retourne le résultat sans la pagination
+        return $this->render('article/index.html.twig', array(
+            'articles' => $articles,'searchForm'=>$formSearch->createView()
+        ));
+      }else{
+        // On compte le nombre d'articles en ligne (date de publication <= aujourd'hui)
+        $articlesCount = $this->getDoctrine()->getRepository('AppBundle:Article')->getCountArticlesOnline();
+        $articles = $this->getDoctrine()->getRepository('AppBundle:Article')->getArticlesList($page);
+        // On compte le nombre page pour 10 articles par pages
+        $countPages=ceil($articlesCount/10);
+        return $this->render('article/index.html.twig', array(
+            'articles' => $articles,'dernierePage'=>$countPages,'currentPage'=>$page,'searchForm'=>$formSearch->createView()
+        ));
+      }
+
 
     }
 
@@ -87,13 +112,43 @@ class DefaultController extends Controller
      */
     public function articlesByCategoryAction(Request $request, $name,$page=1)
     {
-      $articlesCount = $this->getDoctrine()->getRepository('AppBundle:Article')->getCountArticlesOnlineByCategory($name);
-      $countPages=ceil($articlesCount/2);
+      // Formulaire de recherche par nom et/ou tags d'article de la catégorie
+      $formSearch=$this->createForm(SearchArticleType::class);
+      $formSearch->handleRequest($request);
+      if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+        // On récupère les données du formulaire
+        $data=$request->request->get("search_article");
 
-       $articles = $this->getDoctrine()->getRepository('AppBundle:Article')->getArticlesByCategory($name,$page);
-      return $this->render('article/index.html.twig', array(
-          'articles' => $articles,'dernierePage'=>$countPages,'currentPage'=>$page
-      ));
+        if (array_key_exists('name', $data)){
+          $nameArticle = $data['name'];
+        }else{
+          $nameArticle ="";
+        }
+        // Si aucun tag n'est sélectionné on les récupère tous pour ne pas fausser la recherche
+
+        if (array_key_exists('tags', $data)){
+           $tags = $data['tags'];
+        }else{
+          $tags=$this->getDoctrine()->getRepository('AppBundle:Tag')->findAll();
+        }
+
+        // On affiche les articles correspondants à la recherche sans pagination
+        $articles = $this->getDoctrine()->getRepository('AppBundle:Article')->getArticlesBySearchCategory($name,$tags,$nameArticle);
+
+        return $this->render('article/index.html.twig', array(
+            'articles' => $articles,'searchForm'=>$formSearch->createView()
+        ));
+      }else{
+        $articlesCount = $this->getDoctrine()->getRepository('AppBundle:Article')->getCountArticlesOnlineByCategory($name);
+
+        $articles = $this->getDoctrine()->getRepository('AppBundle:Article')->getArticlesByCategory($name,$page);
+        $countPages=ceil($articlesCount/10);
+
+        return $this->render('article/index.html.twig', array(
+            'articles' => $articles,'dernierePage'=>$countPages,'currentPage'=>$page,'searchForm'=>$formSearch->createView()
+        ));
+      }
+
 
     }
 }

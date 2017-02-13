@@ -13,7 +13,9 @@
         {{ form_row(edit_form.content, { 'attr': {'class': 'row fr-view'},'label':'Contenu'}) }}
         <div class="row">
         {{ form_row(edit_form.image,{'attr':{'class' :'file-field input-field file-path-wrapper col s6'},'label':'Image ','required':false})}}
+        {% if article.image  is defined %}
         <img class="col s6" src="{{ asset('images-articles/'~ article.image)}}" alt="{{ article.name }}" />
+        {% endif %}
       </div>
         {{ form_row(edit_form.publication_date,{'attr':{'class' :'datepicker','type':'datetime'},'label':'Date de publication '})}}
         {{ form_row(edit_form.submit, { 'attr': {'class': 'btn waves-effect waves-light
