@@ -1,42 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="row">
-       <div class="col s10 m10">
-         <div class="card">
-           <div class="card-image">
-             {% if article.image %}
-             {# Si une image a été ajoutée pour l'article on l'utilise, sinon on utilise une image noire par défaut #}
-              <img src="{{ asset('images-articles/' ~ article.image) }}" alt="{{ article.name }}"/>
-              {% else %}
-              <img src="{{ asset('images-articles/no-image.png') }}" alt="{{ article.name }}"/>
+    <div class="row">
+        <div class="col s10 m10">
+            <div class="card">
+                <div class="card-image">
+                    {% if article.image %}
+                        {# Si une image a été ajoutée pour l'article on l'utilise, sinon on utilise une image noire par défaut #}
+                        <img class="responsive-img" src="{{ asset('images-articles/' ~ article.image) }}" alt="{{ article.name }}"/>
+                    {% else %}
+                        <img class="responsive-img" src="{{ asset('images-articles/no-image.png') }}" alt="{{ article.name }}"/>
 
-             {% endif %}
-             <span class="card-title">{{ article.name }} <small>Publié le
-             {% if article.publicationDate %}{{ article.publicationDate|date('Y-m-d') }} {{ article.publicationDate|date('d M Y') }}{% endif %}
-             par
-             {{ article.author.username }}</small></span>
-           </div>
-           <div class="card-content">
-             {# contenu de l'article avec mise en page HTML #}
+                    {% endif %}
+                    <span class="card-title">{{ article.name }}
+                        <small style="font-size:50%">Publié le
+                            {{ article.publicationDate| localizeddate('full', 'none') }}
+                            par
+                            {{ article.author.username }}</small>
+                    </span>
+                </div>
+                <div class="card-content">
+                {# contenu de l'article avec mise en page HTML #}
              {{ article.content | raw }}
            <div class="card-action">
-             <p>Commentaires</p>
-             {% if getCommentsCount(article.id) > 0 %}
-               {% for comment in comments %}
-               <div class="card horizontal">
-                 <u><strong style="font-size:18px !important">{{ comment.author }}  le <small> {{ comment.date|date('d/M/Y',"Europe/Paris") }} à {{ comment.date|date('H\\hi') }} </small>:</strong></u><br/></br>
-                     <blockquote style="font-size:14px !important">
-                     {{ comment.content }}
-              </div>
-                {% endfor %}
-             {% else %}
-             <p>
-              Aucun commentaire pour le moment
-             </p>
-             {% endif %}
              <div class="row">
-               <small>Ajouter un commentaire</small>
+              Commenter cet article
              {{ form_start(commentForm, { 'attr': {'class': 'col s12'}}) }}
              {{ form_row(commentForm.author, { 'attr': {'class': 'row'},'label':'Auteur'}) }}
 
@@ -45,6 +33,21 @@
                    '},'label':'Commenter'}) }}
              {{ form_end(commentForm) }}
            </div>
+           <p>Commentaires</p>
+           {% if getCommentsCount(article.id) > 0 %}
+           {# Si il a des commentaires, on les affiche du plus récent au plus ancien #}
+             {% for comment in comments|reverse(true) %}
+             <div class="card horizontal">
+               <u><strong style="font-size:18px !important">{{ comment.author }} </u><small> le  {{ comment.date|localizeddate("medium", "none", null, null, "cccc dd/MM/yyyy à HH'h'mm") }} </small>:</strong><br/></br>
+                   <blockquote style="font-size:14px !important">
+                   {{ comment.content }}
+            </div>
+              {% endfor %}
+           {% else %}
+           <p>
+            Aucun commentaire pour le moment
+           </p>
+           {% endif %}
            </div>
          </div>
        </div>

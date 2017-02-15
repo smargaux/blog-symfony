@@ -11,17 +11,17 @@
   display: block !important;
 }
 footer{
-  background-color: rgb(120, 43, 96) !important;
+  background-color: rgb(107, 33, 62) !important;
 }
- a{
-   color : #d292a8 !important;
- }
+.header a{
+  color : rgb(107, 33, 62) !important;
+}
 /**
 * Liste des articles
 **/
 header{
   overflow: visible !important;
-  background-color: rgb(120, 43, 96) !important;
+  background-color: rgb(107, 33, 62)!important;
 }
 
 .articles-list-card {
