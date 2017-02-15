@@ -80,7 +80,7 @@ class Article
 
     /**
      * Many Articles have Many Tags.
-     * @ORM\ManyToMany(targetEntity="Tag")
+     * @ORM\ManyToMany(targetEntity="Tag",)
      * @ORM\JoinTable(name="article_tag",
      *      joinColumns={@ORM\JoinColumn(name="article_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
@@ -101,7 +101,7 @@ class Article
 
     /**
      * One Article has many comments
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="article", orphanRemoval=true)
      *@Assert\NotNull()
      */
     private $comments;

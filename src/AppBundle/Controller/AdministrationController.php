@@ -132,6 +132,20 @@ public function editAction(Request $request, Article $article)
 
     ));
 }
+
+/**
+ * Suppression d'un article
+ *
+ * @Route("/article/{id}/delete", name="article_delete")
+ */
+public function deleteArticleAction(Request $request, Article $article)
+{
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($article);
+        $em->flush($article);
+
+    return $this->redirectToRoute('article_list');
+}
 /**
  * Liste de toutes les catégories
  *
