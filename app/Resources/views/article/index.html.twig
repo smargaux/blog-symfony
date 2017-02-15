@@ -10,6 +10,7 @@
         {% endif %}
         <div class="row">
           <div class="col s2">
+            {% if searchForm is defined %}
             {{ form_start(searchForm, { 'attr': {'class': 'col s12 centered'}}) }}
             {{ form_row(searchForm.name, { 'attr': {'class': 'row'},'label':'Nom'}) }}
             {{ form_row(searchForm.tags) }}
@@ -17,6 +18,7 @@
         '},'label':'Rechercher'}) }}
 
             {{ form_end(searchForm) }}
+            {% endif %}
           </div>
           <div class="col s10">
 

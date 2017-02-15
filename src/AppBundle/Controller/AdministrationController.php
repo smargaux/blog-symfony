@@ -26,10 +26,8 @@ class AdministrationController extends Controller
    */
   public function indexAction(Request $request)
   {
-      // replace this example code with whatever you need
-      return $this->render('administration/index.html.twig', [
-          'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-      ]);
+      // Affichage de la page d'accueil de l'administration
+      return $this->render('administration/index.html.twig');
   }
 
   /**
@@ -38,10 +36,10 @@ class AdministrationController extends Controller
    * @Route("/articles", name="article_index")
    * @Method("GET")
    */
-  public function  listArticlesAction()
+  public function listArticlesAction()
   {
       $em = $this->getDoctrine()->getManager();
-
+      // On récupère tous les articles (mêmes ceux non publiés)
       $articles = $em->getRepository('AppBundle:Article')->findAll();
 
       return $this->render('article/index.html.twig', array(
@@ -63,23 +61,20 @@ public function newArticleAction(Request $request)
         // On récupère l'utilisateur connecté pour l'assigner en tant qu'auteur de l'article
         $article->setAuthor($this->getUser());
         $file = $article->getImage();
-        // Generate a unique name for the file before saving it
+        // On renomme la photo avec un nom unique
         $fileName = $article->getName().date('Y-m-d').'.'.$file->guessExtension();
 
-        // Move the file to the directory where brochures are stored
+        // On déplace le fichier de le dossier 'images-articles'
         $file->move(
             $this->getParameter('images_directory'),
             $fileName
         );
 
-        // Update the 'brochure' property to store the PDF file name
-        // instead of its contents
+        // On ajoute l'image à l'article
         $article->setImage($fileName);
-
         $em = $this->getDoctrine()->getManager();
         $em->persist($article);
         $em->flush($article);
-
         return $this->redirectToRoute('article_show', array('id' => $article->getId()));
     }
 
@@ -101,27 +96,25 @@ public function editAction(Request $request, Article $article)
     $editForm = $this->createForm('AppBundle\Form\ArticleType', $article);
     $editForm->handleRequest($request);
     if ($editForm->isSubmitted() && $editForm->isValid()) {
-      $article->setAuthor($this->getUser());
+        $article->setAuthor($this->getUser());
         // On charge l'ancienne image si aucune n'a été ajoutée dans la modification du formulaire
-        if($article->getImage()) {
-              if($oldImageName){
-              unlink($this->getParameter('images_directory').'/'.$oldImageName);
+        if ($article->getImage()) {
+            if ($oldImageName) {
+                unlink($this->getParameter('images_directory').'/'.$oldImageName);
             }
-              $file = $article->getImage();
-              $fileName = $article->getName().date('Y-m-d').'.'.$file->guessExtension();
+            $file = $article->getImage();
+            $fileName = $article->getName().date('Y-m-d').'.'.$file->guessExtension();
 
-              $file->move(
+            $file->move(
                   $this->getParameter('images_directory'),
                   $fileName
               );
 
-              $article->setImage($fileName);
-          }
-          //else we keep the old image
-          else {
-              $article->setImage($oldImageName);
-          }
-          $this->getDoctrine()->getManager()->flush();
+            $article->setImage($fileName);
+        } else {
+            $article->setImage($oldImageName);
+        }
+        $this->getDoctrine()->getManager()->flush();
 
         return $this->redirectToRoute('article_show', array('id' => $article->getId()));
     }
@@ -140,9 +133,9 @@ public function editAction(Request $request, Article $article)
  */
 public function deleteArticleAction(Request $request, Article $article)
 {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($article);
-        $em->flush($article);
+    $em = $this->getDoctrine()->getManager();
+    $em->remove($article);
+    $em->flush($article);
 
     return $this->redirectToRoute('article_list');
 }
@@ -168,7 +161,7 @@ public function indexCategoriesAction()
  * @Route("/category/new", name="category_new")
  * @Method({"GET", "POST"})
  */
-public function newCategorieAction(Request $request)
+public function newCategoryAction(Request $request)
 {
     $category = new Category();
     $form = $this->createForm(CategoryType::class, $category);
@@ -194,7 +187,6 @@ public function newCategorieAction(Request $request)
  */
 public function editCategoryAction(Request $request, Category $category)
 {
-    $deleteForm = $this->createDeleteForm($category);
     $editForm = $this->createForm('AppBundle\Form\CategoryType', $category);
     $editForm->handleRequest($request);
 
@@ -206,8 +198,7 @@ public function editCategoryAction(Request $request, Category $category)
 
     return $this->render('category/edit.html.twig', array(
         'category' => $category,
-        'edit_form' => $editForm->createView(),
-        'delete_form' => $deleteForm->createView(),
+        'edit_form' => $editForm->createView()
     ));
 }
 /**
@@ -217,28 +208,13 @@ public function editCategoryAction(Request $request, Category $category)
  */
 public function deleteCategoryAction(Request $request, Category $category)
 {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($category);
-        $em->flush($category);
+    $em = $this->getDoctrine()->getManager();
+    $em->remove($category);
+    $em->flush($category);
 
     return $this->redirectToRoute('category_index');
 }
 
-/**
- * Creates a form to delete a category entity.
- *
- * @param Category $category The category entity
- *
- * @return \Symfony\Component\Form\Form The form
- */
-private function createDeleteCategoryForm(Category $category)
-{
-    return $this->createFormBuilder()
-        ->setAction($this->generateUrl('category_delete', array('id' => $category->getId())))
-        ->setMethod('DELETE')
-        ->getForm()
-    ;
-}
 
 /**
  * Liste de tous les tags
@@ -291,7 +267,6 @@ public function newTagAction(Request $request)
  */
 public function editTagAction(Request $request, Tag $tag)
 {
-    $deleteForm = $this->createDeleteForm($tag);
     $editForm = $this->createForm('AppBundle\Form\TagType', $tag);
     $editForm->handleRequest($request);
 
@@ -303,8 +278,7 @@ public function editTagAction(Request $request, Tag $tag)
 
     return $this->render('tag/edit.html.twig', array(
         'tag' => $tag,
-        'edit_form' => $editForm->createView(),
-        'delete_form' => $deleteForm->createView(),
+        'edit_form' => $editForm->createView()
     ));
 }
 
@@ -315,13 +289,10 @@ public function editTagAction(Request $request, Tag $tag)
  */
 public function deleteTagAction(Request $request, Tag $tag)
 {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($tag);
-        $em->flush($tag);
+    $em = $this->getDoctrine()->getManager();
+    $em->remove($tag);
+    $em->flush($tag);
 
     return $this->redirectToRoute('tag_index');
 }
-
-
-
 }
