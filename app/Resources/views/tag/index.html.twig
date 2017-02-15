@@ -21,7 +21,9 @@
              <tr>
                  <td>{{ tag.id }}</td>
                  <td>{{ tag.name }}</td>
-                 <td><a href="{{ path('tag_edit', { 'id': tag.id }) }}">Modifier</a></td>
+                 <td><a href="{{ path('tag_edit', { 'id': tag.id }) }}">Modifier</a>
+                   {# On montre le lien de suppression uniquement si aucun Article n'est associé à ce tag #}
+                 {% if getCountArticlesByTag(tag.id) == 0 %} <a href="{{ path('tag_delete', { 'id': tag.id }) }}">Supprimer</a>{% endif %}</td>
              </tr>
          {% endfor %}
 

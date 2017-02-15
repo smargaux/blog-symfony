@@ -197,21 +197,15 @@ public function editCategoryAction(Request $request, Category $category)
     ));
 }
 /**
- * Deletes a category entity.
+ * Suppression d'une catégorie
  *
- * @Route("/category/{id}", name="category_delete")
- * @Method("DELETE")
+ * @Route("/category/{id}/delete", name="category_delete")
  */
 public function deleteCategoryAction(Request $request, Category $category)
 {
-    $form = $this->createDeleteForm($category);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($category);
         $em->flush($category);
-    }
 
     return $this->redirectToRoute('category_index');
 }
@@ -301,40 +295,19 @@ public function editTagAction(Request $request, Tag $tag)
 }
 
 /**
- * Deletes a tag entity.
+ * Suppression d'un tag.
  *
- * @Route("/tag/{id}", name="tag_delete")
- * @Method("DELETE")
+ * @Route("/tag/{id}/delete", name="tag_delete")
  */
 public function deleteTagAction(Request $request, Tag $tag)
 {
-    $form = $this->createDeleteForm($tag);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
         $em = $this->getDoctrine()->getManager();
         $em->remove($tag);
         $em->flush($tag);
-    }
 
     return $this->redirectToRoute('tag_index');
 }
 
-/**
- * Creates a form to delete a tag entity.
- *
- * @param Tag $tag The tag entity
- *
- * @return \Symfony\Component\Form\Form The form
- */
-private function createDeleteTagForm(Tag $tag)
-{
-    return $this->createFormBuilder()
-        ->setAction($this->generateUrl('tag_delete', array('id' => $tag->getId())))
-        ->setMethod('DELETE')
-        ->getForm()
-    ;
-}
 
 
 }

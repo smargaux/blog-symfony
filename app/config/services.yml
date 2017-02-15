@@ -19,3 +19,9 @@ services:
             - { name: twig.extension }
         arguments:
           doctrine: "@doctrine"
+    app.tag_extension:
+        class: AppBundle\Twig\TagExtension
+        tags:
+            - { name: twig.extension }
+        arguments:
+          doctrine: "@doctrine"

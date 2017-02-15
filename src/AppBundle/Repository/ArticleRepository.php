@@ -137,5 +137,29 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
                      ->getSingleScalarResult();
     }
 
+    /**
+    * Compte le nombre d'articles par tag
+    **/
+    public function countArticlesByTag($tag){
+      return $this ->createQueryBuilder('a')
+                   ->select('count(a.id)')
+                   ->leftJoin('a.tags','t')
+                   ->where('t.id= :tag')
+                   ->setParameter('tag', $tag)
+                   ->getQuery()
+                   ->getSingleScalarResult();
+    }
 
+    /**
+    * Compte le nombre d'articles par catégorie
+    **/
+    public function countArticlesByCategory($category){
+      return $this ->createQueryBuilder('a')
+                   ->select('count(a.id)')
+                   ->leftJoin('a.category','c')
+                   ->where('c.id= :category')
+                   ->setParameter('category', $category)
+                   ->getQuery()
+                   ->getSingleScalarResult();
+    }
 }

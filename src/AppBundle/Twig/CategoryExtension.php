@@ -12,7 +12,9 @@ class CategoryExtension extends \Twig_Extension
   public function getFunctions()
   {
       return array(
-          new \Twig_SimpleFunction('getCategories', array($this, 'getCategories'))
+          new \Twig_SimpleFunction('getCategories', array($this, 'getCategories')),
+          new \Twig_SimpleFunction('getCountArticlesByCategory', array($this, 'getCountArticlesByCategory'))
+
       );
   }
   public function getCategories(){
@@ -20,7 +22,11 @@ class CategoryExtension extends \Twig_Extension
                 ->getRepository('AppBundle:Category')
                 ->findAll();
   }
-
+  public function getCountArticlesByCategory($category){
+    return $this->doctrine
+                  ->getRepository('AppBundle:Article')
+                  ->countArticlesByCategory($category);
+  }
 
 
 

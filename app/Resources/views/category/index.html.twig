@@ -24,7 +24,10 @@
                  <td><a href="{{ path('category_edit', { 'id': category.id }) }}">Modifier</a>
                    <a href="{{ path('category_delete', { 'id': category.id }) }}"     data-method="delete"
 >Supprimer</a>
-                 <a href="{{  path('category',{name: category.name}) }}">Voir les articles</a></td>
+                 <a href="{{  path('category',{name: category.name}) }}">Voir les articles</a>
+                 {# on affiche le lien de suppression uniquement si aucun article n'est associé à cette catégorie #}
+                 {% if getCountArticlesByCategory(category.id) == 0 %} <a href="{{ path('category_delete', { 'id': category.id }) }}">Supprimer</a>{% endif %}</td>
+</td>
 
              </tr>
          {% endfor %}
