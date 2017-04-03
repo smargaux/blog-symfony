@@ -54,9 +54,10 @@ class Comment
     private $article;
 
 
-    public function __construct(Article $article){
-      $this->article=$article;
-      $this->date=new \DateTime();
+    public function __construct(Article $article)
+    {
+        $this->article=$article;
+        $this->date=new \DateTime();
     }
     /**
      * Get id
@@ -139,30 +140,4 @@ class Comment
     {
         return $this->date;
     }
-
-
-    /**
-     * Set article
-     *
-     * @param \AppBunde\Entity\Article $article
-     *
-     * @return Article
-     */
-      public function setArticle(\AppBunde\Entity\Article $article = null)
-      {
-          $this->article = $article;
-
-          return $this;
-      }
-
-      /**
-       * Get article
-       *
-       * @return \AppBunde\Entity\Article
-       */
-      public function getArticle()
-      {
-          return $this->article;
-      }
-
 }
